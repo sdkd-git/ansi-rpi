@@ -1,0 +1,11 @@
+---
+
+  - name: Post-Installation Packages for RPI
+    user: root
+    become: true
+    hosts: localhost
+    any_errors_fatal: false
+    ignore_errors: yes 
+    roles:
+# Media Server
+      - { role: jellyfin }
