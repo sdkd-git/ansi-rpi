@@ -3,9 +3,17 @@
   - name: Post-Installation Packages for RPI
     user: root
     become: true
-    hosts: localhost
+    hosts: all
     any_errors_fatal: false
     ignore_errors: yes 
     roles:
-# Media Server
-      - { role: jellyfin }
+# # Media Server
+      # - { role: jellyfin }
+      - { role: emby-server }
+# # Containers
+      # - { role: docker }
+# # Home Assistant (Enable Docker for HA installation)
+#       - { role: ha-docker }
+#       - { role: esphome-docker }
+# # Monitoring Agent
+      #  - { role: zabbix-agent_dht11  } (Work in progress)

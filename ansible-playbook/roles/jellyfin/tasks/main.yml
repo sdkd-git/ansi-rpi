@@ -6,16 +6,23 @@
     keyring: /usr/share/keyrings/jellyfin-archive-keyring.gpg
     state: present
 
-- name: add Jellyfin repo
+- name: Add Jellyfin repo
+  register: jellyfin_repo
   apt_repository: repo='deb [signed-by=/usr/share/keyrings/jellyfin-archive-keyring.gpg arch=arm64] https://repo.jellyfin.org/debian bullseye main' state=present
 
 - name: Install Jellyfin
-  apt: name=['apt-transport-https','jellyfin'] state=present update_cache=yes
   register: jellyfin_app
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - jellyfin
+    state:  present
+    update_cache: yes
+  when: jellyfin_repo.changed
 
 - name: Restart JellyFin
   ansible.builtin.service:
     name: jellyfin
-    state: restart
+    state: restarted
     enabled: yes
   when: jellyfin_app.changed

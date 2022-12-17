@@ -1,0 +1,14 @@
+---
+
+# embyserver_url: 'https://github.com/MediaBrowser/Emby.Releases/releases/download/4.8.0.19/emby-server-deb_4.8.0.19_arm64.deb'
+
+- name: Install Emby-Server
+  apt: deb="https://github.com/MediaBrowser/Emby.Releases/releases/download/4.8.0.19/emby-server-deb_4.8.0.19_arm64.deb"
+  register: emby-mediaserver
+
+- name: Restart Emby-Server
+  ansible.builtin.service:
+    name: emby-server
+    state: restart
+    enabled: yes
+  when: emby-mediaserver.changed

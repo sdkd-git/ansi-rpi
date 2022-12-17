@@ -1,6 +1,6 @@
 #!/bin/bash
 ################################################################################
-#Set Colour Schemes
+# #Set Colour Schemes
 RED='\033[0;31m' # RED
 YLLO='\033[1;33m' # Light Yellow
 LCYAN='\033[1;36m' # Light Cyan
@@ -9,12 +9,12 @@ NC='\033[0m' # No Color
 #Windows uses \r\n as the line terminator while Linux (and most other operating systems) use \n alone. When you edit a file in Windows, Windows will add \r to the end of the lines and that will break your scripts.
 #sed -i 's/\r//g' postinstall.sh
 #Variables
-installpkg='ansible git curl'
+installpkg='ansible git'
 temppath='/tmp/ansi-rpi'
 ansirepo="/etc/apt/sources.list.d/"
 #Generate Log File
 #Create Temporary storage directory
-# rm -rf $temppath
+#rm -rf $temppath
 mkdir -p $temppath
 logfile="$temppath/$RANDOM.log"
 cd $temppath
@@ -33,24 +33,24 @@ Author: Saideep Kavidi
 Github: https://github.com/sdkd-git/
 License: MIT License
 #
-#This script can be used for installation of provided apps and services.
-Uncomment the packages you want to install from ansible/main.yml.
+#This script can be used for installation of provided roles and services.
+Uncomment the roles you want to install from ansible-playbook/main.yml.
 Make Sure you have customized Anisble-Playbook as per your requirement before
 you begin the installation.
 ################################################################################
 EOF
 ################################################################################
 # Command exits with a nonzero exit value
-# set -e
-# Check is user is running with permission
-# if ! [ $(id -u) = 0 ];
-#   then echo -e "\n${YLLO}The script need to be run as root.${NC}" >&2
-#   exit 1
-# fi
-echo -e "\n$(date)\n$(uname -nir)\n" >> $logfile
+set -e
+Check is user is running with permission
+if ! [ $(id -u) = 0 ];
+  then echo -e "\n${YLLO}The script need to be run as root.${NC}" >&2
+  exit 1
+fi
+echo -e "\n$(date)\n$(uname -nir)\n" 
 # ################################################################################
 # Script for auto update/autoremove and dist-upgrade.
- apt-get update >> $logfile
+ apt-get update 
 # if [ $? = 0 ]; then
 #   echo -e "${LGRN}Repository update Completed\n"
 # else
@@ -58,7 +58,7 @@ echo -e "\n$(date)\n$(uname -nir)\n" >> $logfile
 #   exit 4
 # fi
 # # Ubuntu upgrade
-apt-get dist-upgrade -y >> $logfile
+apt-get dist-upgrade -y 
 # if [[ $? = 0 ]]; then
 #   echo -e "Upgrade completed\n"
 # else
@@ -66,7 +66,7 @@ apt-get dist-upgrade -y >> $logfile
 #   exit 5
 # fi
 # # Ubuntu Auto Package removal
-apt-get autoremove -y >> $logfile
+apt-get autoremove -y 
 # if [[ $? = 0 ]]; then
 #   echo -e "Autoremove completed\n"
 # else
@@ -74,9 +74,9 @@ apt-get autoremove -y >> $logfile
 #   exit 11
 # fi
 # ################################################################################
-apt-get update >> $logfile
+apt-get update 
 # # Install Packages
-apt-get install $installpkg -y >> $logfile
+apt-get install $installpkg -y 
 # if ! [ $? = 0 ];
 #   then
 #     echo -e "\n${LGRN} Installation failed for following packages $installpkg ${NC}\n" >&2
@@ -84,16 +84,15 @@ apt-get install $installpkg -y >> $logfile
 #     exit 6
 # fi
 # # Check Dependency Packages/Force install/Autoremove
-echo -e "${YLLO}Checking and reinstalling for dependency packages${NC}\n"
-apt-get install -f -y >> $logfile
-apt-get autoremove -y >> $logfile
+echo -e "Checking and reinstalling for dependency packages\n"
+apt-get install -f -y 
+apt-get autoremove -y 
 # ################################################################################
 # #git Clone
-pwd
 git clone https://github.com/sdkd-git/ansi-rpi
 # ################################################################################
 # echo -e "${LGRN}Starting Ansible Playbook.${NC}\n"
-ansible-playbook ansi-rpi/ansible-playbook/main.yml -v >> $logfile
+ansible-playbook ansi-rpi/ansible-playbook/main.yml -v 
 # exitstate='$?'
 # # Cleaning TemporaryFiles
 echo -e "${YLLO}Cleaning Apt Cache${NC}"
